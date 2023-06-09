@@ -12,12 +12,12 @@ RUN chmod +x /var/www/html/bin/console
 RUN mkdir -p /var/www/.cache/composer/files; \
     chown -R www-data:www-data /var/www/.cache
 
+COPY /php-fpm/supervisord.conf /etc/supervisor/supervisord.conf
+
+COPY /php-fpm/nginx.conf /etc/nginx/sites-available/default
+
 COPY --chown=www-data:www-data /composer.json /var/www/html/composer.json
 RUN cd /var/www/html && \
     runuser -u www-data -- \
         php -d memory_limit=-1 -d xdebug.remote_enable=0 \
-        /usr/bin/composer install --prefer-dist --no-scripts
-
-COPY /php-fpm/supervisord.conf /etc/supervisor/supervisord.conf
-
-COPY /php-fpm/nginx.conf /etc/nginx/sites-available/default
+        /usr/bin/composer install --prefer-dist

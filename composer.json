@@ -7,5 +7,10 @@
   },
   "config": {
     "lock": false
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "Pimcore\\Composer::postInstall"
+    ]
   }
 }
