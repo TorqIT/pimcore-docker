@@ -1,8 +1,8 @@
 FROM pimcore/pimcore:PHP8.1-supervisord
 
 RUN set -eux; \
-    apt-get update -y; \
-    apt-get install -y vim netcat iputils-ping net-tools cron; \
+    apt update -y; \
+    apt install -y vim netcat iputils-ping net-tools cron; \
     usermod -u 1000 www-data; \
     groupmod -g 1000 www-data; 
 

@@ -1,8 +1,8 @@
 FROM pimcore/pimcore:PHP8.1-fpm
 
 RUN set -eux; \
-    apt-get update -y; \
-    apt-get install -y --no-install-recommends vim nginx supervisor netcat net-tools iputils-ping default-mysql-client; \
+    apt update; \
+    apt install -y --no-install-recommends vim nginx supervisor netcat net-tools iputils-ping default-mysql-client; \
     usermod -u 1000 www-data; \
     groupmod -g 1000 www-data
 
