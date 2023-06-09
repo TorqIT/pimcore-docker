@@ -1,4 +1,4 @@
-FROM pimcore/pimcore:PHP8.2-fpm-debug
+FROM pimcore/pimcore:PHP8.1-fpm-debug
 
 RUN set -eux; \
     apt-get update -y; \
