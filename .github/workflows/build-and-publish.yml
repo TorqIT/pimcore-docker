@@ -1,0 +1,73 @@
+name: Create and publish Docker images
+
+on:
+  push:
+  workflow_dispatch:
+
+concurrency: 
+  group: ${{ github.repository }}__${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - dockerfile: ./php-fpm/Dockerfile.php-fpm
+            image: ghcr.io/${{ github.org }}/pimcore-php-fpm
+          - dockerfile: ./php-fpm-debug/Dockerfile.php-fpm-debug
+            image: ghcr.io/${{ github.org }}/pimcore-php-fpm-debug
+          - dockerfile: ./supervisord/Dockerfile.supervisord
+            image: ghcr.io/${{ github.org }}/pimcore-supervisord
+          - dockerfile: ./redis/Dockerfile.redis
+            image: ghcr.io/${{ github.org }}/pimcore-redis
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to the GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Determine image label
+        id: label
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "label=latest" >> $GITHUB_OUTPUT
+          else
+            echo "label=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ matrix.image }}
+          tags: ${{ steps.label.outputs.label }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

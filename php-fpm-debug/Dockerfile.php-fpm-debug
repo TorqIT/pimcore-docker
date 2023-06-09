@@ -1,0 +1,7 @@
+FROM pimcore/pimcore:PHP8.2-fpm-debug
+
+RUN set -eux; \
+    apt-get update -y; \
+    apt-get install -y --no-install-recommends vim ; \
+    usermod -u 1000 www-data; \
+    groupmod -g 1000 www-data; 

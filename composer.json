@@ -1,0 +1,8 @@
+{
+  "name": "torqit/pimcore-skeleton",
+  "type": "project",
+  "license": "GPL-3.0-or-later",
+  "require": {
+    "pimcore/pimcore": "10.5.*"
+  }
+}

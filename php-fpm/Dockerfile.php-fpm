@@ -1,0 +1,20 @@
+FROM pimcore/pimcore:PHP8.2-fpm
+
+RUN set -eux; \
+    apt-get update -y; \
+    apt-get install -y --no-install-recommends vim nginx supervisor netcat net-tools iputils-ping default-mysql-client; \
+    usermod -u 1000 www-data; \
+    groupmod -g 1000 www-data
+
+COPY /php-fpm/nginx.conf /etc/nginx/sites-available/default
+
+COPY /console /var/www/html/bin/console
+RUN chmod +x /var/www/html/bin/console
+
+COPY --chown=www-data:www-data /composer.json /var/www/html/composer.json
+RUN cd /var/www/html && \
+    runuser -u www-data -- \
+        php -d memory_limit=-1 -d xdebug.remote_enable=0 \
+        /usr/bin/composer install --prefer-dist --no-scripts
+
+COPY /php-fpm/supervisord.conf /etc/supervisor/supervisord.conf
