@@ -6,7 +6,7 @@ RUN set -eux; \
     usermod -u 1000 www-data; \
     groupmod -g 1000 www-data; 
 
-COPY /console /var/www/html/bin/console
+COPY --chown=www-data:www-data /console /var/www/html/bin/console
 RUN chmod +x /var/www/html/bin/console
 
 COPY /supervisord/supervisord.conf /etc/supervisor/conf.d/pimcore.conf
