@@ -9,10 +9,13 @@ RUN set -eux; \
 COPY --chown=www-data:www-data /console /var/www/html/bin/console
 RUN chmod +x /var/www/html/bin/console
 
-COPY /supervisord/supervisord.conf /etc/supervisor/conf.d/pimcore.conf
+RUN mkdir -p /var/www/.cache/composer/files; \
+    chown -R www-data:www-data /var/www/.cache
 
 COPY --chown=www-data:www-data /composer.json /var/www/html/composer.json
 RUN cd /var/www/html && \
     runuser -u www-data -- \
         php -d memory_limit=-1 -d xdebug.remote_enable=0 \
         /usr/bin/composer install --prefer-dist --no-scripts
+
+COPY /supervisord/supervisord.conf /etc/supervisor/conf.d/pimcore.conf
