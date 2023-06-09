@@ -20,4 +20,4 @@ COPY --chown=www-data:www-data /composer.json /var/www/html/composer.json
 RUN cd /var/www/html && \
     runuser -u www-data -- \
         php -d memory_limit=-1 -d xdebug.remote_enable=0 \
-        /usr/bin/composer install --prefer-dist
+        /usr/bin/composer install --prefer-dist --no-scripts
