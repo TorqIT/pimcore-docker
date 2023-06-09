@@ -8,9 +8,6 @@ concurrency:
   group: ${{ github.repository }}__${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  REPOSITORY: ghcr.io
-
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -19,13 +16,13 @@ jobs:
       matrix:
         include:
           - dockerfile: ./php-fpm/Dockerfile.php-fpm
-            image: ${{ env.REPOSITORY }}/${{ github.org }}/pimcore-php-fpm
+            image: ghcr.io/TorqIT/pimcore-php-fpm
           - dockerfile: ./php-fpm-debug/Dockerfile.php-fpm-debug
-            image: ${{ env.REPOSITORY }}/${{ github.org }}/pimcore-php-fpm-debug
+            image: ghcr.io/TorqIT/pimcore-php-fpm-debug
           - dockerfile: ./supervisord/Dockerfile.supervisord
-            image: ${{ env.REPOSITORY }}/${{ github.org }}/pimcore-supervisord
+            image: ghcr.io/TorqIT/pimcore-supervisord
           - dockerfile: ./redis/Dockerfile.redis
-            image: ${{ env.REPOSITORY }}/${{ github.org }}/pimcore-redis
+            image: ghcr.io/TorqIT/pimcore-redis
     permissions:
       contents: read
       packages: write
@@ -37,7 +34,7 @@ jobs:
       - name: Log in to the GitHub Container Registry
         uses: docker/login-action@v2
         with:
-          registry: ${{ env.REPOSITORY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
