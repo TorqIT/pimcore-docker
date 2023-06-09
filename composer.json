@@ -4,5 +4,8 @@
   "license": "GPL-3.0-or-later",
   "require": {
     "pimcore/pimcore": "10.5.*"
+  },
+  "config": {
+    "lock": false
   }
 }
