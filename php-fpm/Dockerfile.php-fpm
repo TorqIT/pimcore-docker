@@ -3,21 +3,13 @@ FROM pimcore/pimcore:PHP8.1-fpm
 RUN set -eux; \
     apt update; \
     apt install -y --no-install-recommends vim nginx supervisor netcat net-tools iputils-ping default-mysql-client; \
+    rm -rf /var/lib/apt/lists/*; \
     usermod -u 1000 www-data; \
     groupmod -g 1000 www-data
 
 COPY --chown=www-data:www-data /console /var/www/html/bin/console
 RUN chmod +x /var/www/html/bin/console
 
-RUN mkdir -p /var/www/.cache/composer/files; \
-    chown -R www-data:www-data /var/www/.cache
-
 COPY /php-fpm/supervisord.conf /etc/supervisor/supervisord.conf
 
 COPY /php-fpm/nginx.conf /etc/nginx/sites-available/default
-
-COPY --chown=www-data:www-data /composer.json /var/www/html/composer.json
-RUN cd /var/www/html && \
-    runuser -u www-data -- \
-        php -d memory_limit=-1 -d xdebug.remote_enable=0 \
-        /usr/bin/composer install --prefer-dist --no-scripts
