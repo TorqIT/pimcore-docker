@@ -4,7 +4,7 @@ on:
   push:
   workflow_dispatch:
 
-concurrency: 
+concurrency:
   group: ${{ github.repository }}__${{ github.ref }}
   cancel-in-progress: true
 
@@ -15,13 +15,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: ./php-fpm/Dockerfile.php-fpm
-            image: ghcr.io/TorqIT/pimcore-php-fpm
-          - dockerfile: ./php-fpm-debug/Dockerfile.php-fpm-debug
-            image: ghcr.io/TorqIT/pimcore-php-fpm-debug
-          - dockerfile: ./supervisord/Dockerfile.supervisord
+          - dockerfile: ./Dockerfile
+            image: ghcr.io/TorqIT/pimcore-php
+            target: php
+          - dockerfile: ./Dockerfile
             image: ghcr.io/TorqIT/pimcore-supervisord
-          - dockerfile: ./redis/Dockerfile.redis
+            target: supervisord
+          - dockerfile: ./Dockerfile.redis
             image: ghcr.io/TorqIT/pimcore-redis
     permissions:
       contents: read
@@ -64,9 +64,10 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
+          push: true
           context: .
           file: ${{ matrix.dockerfile }}
-          push: true
+          target: ${{ matrix.target }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
