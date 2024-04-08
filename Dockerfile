@@ -2,7 +2,7 @@ FROM pimcore/pimcore:php8.2-v3 as base
 
 RUN set -eux; \
     apt update; \
-    apt install -y --no-install-recommends vim nginx supervisor netcat net-tools iputils-ping default-mysql-client; \
+    apt install -y --no-install-recommends vim nginx supervisor netcat-traditional net-tools iputils-ping default-mysql-client; \
     rm -rf /var/lib/apt/lists/*; \
     usermod -u 1000 www-data; \
     groupmod -g 1000 www-data; 
