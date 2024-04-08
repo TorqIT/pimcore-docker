@@ -33,8 +33,8 @@ FROM base as supervisord
 RUN set -eux; \
     apt update; \
     apt install -y cron; \
-    rm -rf /var/lib/apt/lists/*; \
     chmod gu+rw /var/run; \
-    chmod gu+s /usr/sbin/cron
+    chmod gu+s /usr/sbin/cron; \
+    rm -rf /var/lib/apt/lists/*;
 COPY /supervisord/supervisord.conf /etc/supervisor/supervisord.conf
 CMD ["/usr/bin/supervisord"]
