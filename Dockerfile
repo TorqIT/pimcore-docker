@@ -14,7 +14,7 @@ ARG $PHP_MAX_EXECUTION_TIME=0
 ARG $PHP_MAX_INPUT_TIME=-1
 ARG $PHP_SESSION_SAVE_HANDLER=redis
 ARG $PHP_SESSION_SAVE_PATH="tcp://${REDIS_HOST}:6379?database=${REDIS_SESSION_DB}"
-COPY /php/php.ini /usr/local/etc/php/conf.d/php.ini
+COPY /base/php.ini /usr/local/etc/php/conf.d/php.ini
 
 FROM base as php
 COPY /php/supervisord.conf /etc/supervisor/supervisord.conf
