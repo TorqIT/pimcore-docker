@@ -30,11 +30,11 @@ COPY /php/nginx.conf /etc/nginx/sites-available/default
 CMD ["/usr/bin/supervisord"]
 
 FROM base as supervisord
-RUN set -ex; \
-    apt update; \
-    apt install -y cron; \
-    chmod gu+rw /var/run; \
-    chmod gu+s /usr/sbin/cron; \
-    rm -rf /var/lib/apt/lists/*;
+RUN set -ex; 
+RUN apt update; 
+RUN apt install -y cron; 
+RUN chmod gu+rw /var/run; 
+RUN chmod gu+s /usr/sbin/cron; 
+RUN rm -rf /var/lib/apt/lists/*;
 COPY /supervisord/supervisord.conf /etc/supervisor/supervisord.conf
 CMD ["/usr/bin/supervisord"]
