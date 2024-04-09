@@ -1,6 +1,6 @@
 FROM pimcore/pimcore:php8.2-v3 as base
 
-RUN set -eux; \
+RUN set -ex; \
     apt update; \
     apt install -y --no-install-recommends vim nginx supervisor netcat-traditional net-tools iputils-ping default-mysql-client; \
     rm -rf /var/lib/apt/lists/*; \
@@ -30,11 +30,11 @@ COPY /php/nginx.conf /etc/nginx/sites-available/default
 CMD ["/usr/bin/supervisord"]
 
 FROM base as supervisord
-RUN set -eux;
-RUN apt update; 
-RUN apt install -y cron; 
-RUN chmod gu+rw /var/run; 
-RUN chmod gu+s /usr/sbin/cron; 
-RUN rm -rf /var/lib/apt/lists/*;
+RUN set -ex; \
+    apt update; \
+    apt install -y cron; \
+    chmod gu+rw /var/run; \
+    chmod gu+s /usr/sbin/cron; \
+    rm -rf /var/lib/apt/lists/*;
 COPY /supervisord/supervisord.conf /etc/supervisor/supervisord.conf
 CMD ["/usr/bin/supervisord"]
