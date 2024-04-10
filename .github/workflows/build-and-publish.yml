@@ -16,6 +16,9 @@ jobs:
       matrix:
         include:
           - dockerfile: ./Dockerfile
+            image: ghcr.io/TorqIT/pimcore-base
+            target: base
+          - dockerfile: ./Dockerfile
             image: ghcr.io/TorqIT/pimcore-php
             target: php
           - dockerfile: ./Dockerfile
