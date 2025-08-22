@@ -3,5 +3,5 @@
   "type": "metapackage",
   "license": "MIT",
   "description": "Docker setup for Pimcore",
-  "version": "1.0.0"
+  "version": "1.0"
 }
