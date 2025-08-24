@@ -2,6 +2,5 @@
   "name": "torq/pimcore-docker",
   "type": "metapackage",
   "license": "MIT",
-  "description": "Docker setup for Pimcore",
-  "version": "1.0"
+  "description": "Docker configuration files for Pimcore"
 }
